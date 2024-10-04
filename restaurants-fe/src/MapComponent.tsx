@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { Button } from "./components/ui/button";
 
 const mapContainerStyle = {
-    width: "100%",   // Full width of the card
-    height: "200px", // Adjust this based on the height you want for the map
+    width: "100%",
+    height: "400px",
 };
 
 const options = {
@@ -37,7 +38,7 @@ const MapComponent: React.FC = () => {
                 },
                 () => {
                     console.error("Geolocation permission denied or unavailable");
-                    setLocation(defaultCenter); // Fallback
+                    setLocation(defaultCenter);
                 }
             );
         }
@@ -47,23 +48,23 @@ const MapComponent: React.FC = () => {
     if (!isLoaded || !location) return <div>Loading Maps...</div>;
 
     return (
-        <div className="flex items-center w-full justify-center min-h-screen">
-            <Card className="w-full max-w-xl shadow-lg">
-                <CardHeader>
-                    <CardTitle className="text-center text-xl font-bold mb-4">Your Location</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <GoogleMap
-                        mapContainerStyle={mapContainerStyle}
-                        zoom={12}
-                        center={location}
-                        options={options}
-                    >
-                        {location && <Marker position={location} />}
-                    </GoogleMap>
-                </CardContent>
-            </Card>
-        </div>
+        <Card className="w-full max-w-xl shadow-lg">
+            <CardHeader>
+                <CardTitle className="text-center text-2xl font-bold">Your Location</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <GoogleMap
+                    mapContainerStyle={mapContainerStyle}
+                    zoom={12}
+                    center={location}
+                    options={options}
+                >
+                    {location && <Marker position={location} />}
+                </GoogleMap>
+                <Button variant={"default"} className="bg-black hover:bg-gray-800 text-white mt-4 rounded-xl">Get Restaurants</Button>
+            </CardContent>
+        </Card>
+
     );
 };
 
