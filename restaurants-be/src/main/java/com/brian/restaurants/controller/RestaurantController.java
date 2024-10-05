@@ -4,7 +4,6 @@ import com.brian.restaurants.assembler.RestaurantModelAssembler;
 import com.brian.restaurants.exception.RestaurantNotFoundException;
 import com.brian.restaurants.model.Restaurant;
 import com.brian.restaurants.repository.RestaurantRepository;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +13,7 @@ public class RestaurantController {
 
     private final RestaurantRepository repository;
 
+    @SuppressWarnings("unused")
     private final RestaurantModelAssembler assembler;
 
     RestaurantController(RestaurantRepository repository, RestaurantModelAssembler assembler) {
