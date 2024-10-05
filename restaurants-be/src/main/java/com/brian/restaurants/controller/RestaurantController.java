@@ -4,6 +4,8 @@ import com.brian.restaurants.assembler.RestaurantModelAssembler;
 import com.brian.restaurants.exception.RestaurantNotFoundException;
 import com.brian.restaurants.model.Restaurant;
 import com.brian.restaurants.repository.RestaurantRepository;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,9 @@ public class RestaurantController {
 
     @SuppressWarnings("unused")
     private final RestaurantModelAssembler assembler;
+
+    @Value("${google.places.api.key}")
+    private String googlePlacesApiKey;
 
     RestaurantController(RestaurantRepository repository, RestaurantModelAssembler assembler) {
         this.repository = repository;
