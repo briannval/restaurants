@@ -1,5 +1,6 @@
 package com.brian.restaurants.controller;
 
+import com.brian.restaurants.assembler.RestaurantModelAssembler;
 import com.brian.restaurants.exception.RestaurantNotFoundException;
 import com.brian.restaurants.model.Restaurant;
 import com.brian.restaurants.repository.RestaurantRepository;
@@ -8,21 +9,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 public class RestaurantController {
 
     private final RestaurantRepository repository;
 
-    RestaurantController(RestaurantRepository repository) {
+    private final RestaurantModelAssembler assembler;
+
+    RestaurantController(RestaurantRepository repository, RestaurantModelAssembler assembler) {
         this.repository = repository;
+        this.assembler = assembler;
     }
 
     // mapping is what type of HTTP request it is
     @GetMapping("/restaurants")
-    List<Restaurant> all() {
+    public List<Restaurant> all() {
         return repository.findAll();
     }
 
@@ -32,19 +33,16 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants/{id}")
-    EntityModel<Restaurant> one(@PathVariable Long id) {
-        /*
-        OLD IMPLEMENTATION: not RESTful!
+    public Restaurant one(@PathVariable Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
-        */
 
+        /*
         Restaurant restaurant = repository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
 
-        return EntityModel.of(restaurant,
-                linkTo(methodOn(RestaurantController.class).one(id)).withSelfRel(),
-                linkTo(methodOn(RestaurantController.class).all()).withRel("restaurants"));
+        return assembler.toModel(restaurant);
+        */
     }
 
     @PutMapping("/restaurants/{id}")

@@ -17,8 +17,8 @@ public class RestaurantsApplication {
     }
 
     @GetMapping("/")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+    public String welcome(@RequestParam(value = "name", defaultValue = "World") String name) {
         // test route
-        return String.format("Hello %s!", name);
+        return String.format("Hello %s! Welcome to the Restaurants API!", name);
     }
 }
