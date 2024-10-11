@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashSet;
+
 @Configuration
 class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
@@ -15,35 +17,37 @@ class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(RestaurantRepository repository) {
         return args -> {
-            log.info("Preloading " + repository.save(new Restaurant(
+            Restaurant koerner = new Restaurant(
                     null,
                     "Koerner's Pub",
                     "1758 West Mall, Vancouver",
                     "ChIJzbpt5LNyhlQRuvflSCUx9ns",
                     49.2684653,
-                    -123.2581069,
-                    4.1
-            )));
+                    -123.2581069, new HashSet<>());
 
-            log.info("Preloading " + repository.save(new Restaurant(
+            Restaurant tims = new Restaurant(
                     null,
                     "Tim Hortons",
                     "David Lam, 2015 Main Mall, Vancouver",
                     "ChIJaVgq5MtyhlQRhGixrme65Qg",
                     49.2671894302915,
                     -123.2531234697085,
-                    3.1
-            )));
+                    new HashSet<>());
 
-            log.info("Preloading " + repository.save(new Restaurant(
+            Restaurant mightyOak = new Restaurant(
                     null,
                     "The Mighty Oak @ the Well Cafe",
                     "5800 University Boulevard, Vancouver",
                     "ChIJt3eRBshyhlQRNjbZO0iuprw",
                     49.265648,
                     -123.244093,
-                    4.8
-            )));
+                    new HashSet<>());
+
+            log.info("Preloading " + repository.save(koerner));
+
+            log.info("Preloading " + repository.save(tims));
+
+            log.info("Preloading " + repository.save(mightyOak));
         };
     }
 }

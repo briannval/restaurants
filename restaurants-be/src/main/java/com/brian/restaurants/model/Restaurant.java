@@ -1,19 +1,22 @@
 package com.brian.restaurants.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.util.Set;
 
 @Entity
 @Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "restaurant")
 public class Restaurant {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -21,5 +24,11 @@ public class Restaurant {
     private String googlePlaceId;
     private Double latitude;
     private Double longitude;
-    private Double rating;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private Set<Review> reviews;
+
+    public void addReview(Review review) {
+       this.reviews.add(review);
+    }
 }

@@ -58,7 +58,6 @@ public class RestaurantController {
                     restaurant.setAddress(newRestaurant.getAddress());
                     restaurant.setLatitude(newRestaurant.getLatitude());
                     restaurant.setLongitude(newRestaurant.getLongitude());
-                    restaurant.setRating(newRestaurant.getRating());
                     restaurant.setGooglePlaceId(newRestaurant.getGooglePlaceId());
                     return repository.save(restaurant);
                 })
