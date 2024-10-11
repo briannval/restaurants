@@ -1,6 +1,7 @@
 package com.brian.restaurants.controller;
 
 import com.brian.restaurants.assembler.RestaurantModelAssembler;
+import com.brian.restaurants.dto.LocationRequest;
 import com.brian.restaurants.exception.RestaurantNotFoundException;
 import com.brian.restaurants.model.Restaurant;
 import com.brian.restaurants.repository.RestaurantRepository;
@@ -71,5 +72,11 @@ public class RestaurantController {
         repository.deleteById(id);
     }
 
+    @PostMapping("/restaurants/recommend")
+    String recommendRestaurants(@RequestBody LocationRequest locationRequest) {
+        double latitude = locationRequest.getLatitude();
+        double longitude = locationRequest.getLongitude();
 
+        return "Your latitude is " + latitude + " and longitude is " + longitude;
+    }
 }
