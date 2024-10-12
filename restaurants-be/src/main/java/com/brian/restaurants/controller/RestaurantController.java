@@ -62,19 +62,17 @@ public class RestaurantController {
     }
 
     @PutMapping("/restaurants/{id}")
-    Restaurant replaceRestaurant(@RequestBody Restaurant newRestaurant, @PathVariable Long id) {
-        return repository.findById(id)
-                .map(restaurant -> {
-                    restaurant.setName(newRestaurant.getName());
-                    restaurant.setAddress(newRestaurant.getAddress());
-                    restaurant.setLatitude(newRestaurant.getLatitude());
-                    restaurant.setLongitude(newRestaurant.getLongitude());
-                    restaurant.setGooglePlaceId(newRestaurant.getGooglePlaceId());
-                    return repository.save(restaurant);
-                })
-                .orElseGet(() -> {
-                    return repository.save(newRestaurant);
-                });
+    Restaurant replaceRestaurant(@RequestBody RestaurantRequest r, @PathVariable Long id) {
+        Restaurant replaceR = repository.findById(id)
+                .orElseThrow(() -> new RestaurantNotFoundException(id));
+
+        replaceR.setName(r.getName());
+        replaceR.setAddress(r.getAddress());
+        replaceR.setGooglePlaceId(r.getGooglePlaceId());
+        replaceR.setLatitude(r.getLatitude());
+        replaceR.setLongitude(r.getLongitude());
+
+        return repository.save(replaceR);
     }
 
     @DeleteMapping("/restaurants/{id}")
