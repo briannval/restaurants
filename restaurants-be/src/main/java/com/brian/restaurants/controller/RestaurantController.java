@@ -6,9 +6,8 @@ import com.brian.restaurants.dto.RestaurantRequest;
 import com.brian.restaurants.exception.RestaurantNotFoundException;
 import com.brian.restaurants.model.Restaurant;
 import com.brian.restaurants.repository.RestaurantRepository;
-
+import com.brian.restaurants.service.GooglePlacesService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -19,15 +18,15 @@ public class RestaurantController {
 
     private final RestaurantRepository repository;
 
+    private final GooglePlacesService gService;
+
     @SuppressWarnings("unused")
     private final RestaurantModelAssembler assembler;
 
-    @Value("${google.places.api.key}")
-    private String googlePlacesApiKey;
-
-    RestaurantController(RestaurantRepository repository, RestaurantModelAssembler assembler) {
+    RestaurantController(RestaurantRepository repository, RestaurantModelAssembler assembler, GooglePlacesService gService) {
         this.repository = repository;
         this.assembler = assembler;
+        this.gService = gService;
     }
 
     // mapping is what type of HTTP request it is
@@ -82,10 +81,14 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants/recommend")
-    String recommendRestaurants(@Valid @RequestBody LocationRequest locationRequest) {
+    List<RestaurantRequest> recommendRestaurants(@Valid @RequestBody LocationRequest locationRequest) {
         double latitude = locationRequest.getLatitude();
         double longitude = locationRequest.getLongitude();
 
-        return "Your latitude is " + latitude + " and longitude is " + longitude;
+        String gPlaceRes = gService.findNearbyRestaurants(latitude, longitude);
+
+        List<RestaurantRequest> res = gService.parseGooglePlacesResponse(gPlaceRes);
+
+        return res;
     }
 }
