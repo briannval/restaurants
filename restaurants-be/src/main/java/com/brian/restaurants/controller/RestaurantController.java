@@ -2,13 +2,16 @@ package com.brian.restaurants.controller;
 
 import com.brian.restaurants.assembler.RestaurantModelAssembler;
 import com.brian.restaurants.dto.LocationRequest;
+import com.brian.restaurants.dto.RestaurantRequest;
 import com.brian.restaurants.exception.RestaurantNotFoundException;
 import com.brian.restaurants.model.Restaurant;
 import com.brian.restaurants.repository.RestaurantRepository;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -34,8 +37,15 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants")
-    Restaurant newRestaurant(@RequestBody Restaurant newRestaurant) {
-        return repository.save(newRestaurant);
+    public Restaurant newRestaurant(@RequestBody RestaurantRequest r) {
+        Restaurant newR = new Restaurant(null,
+                r.getName(),
+                r.getAddress(),
+                r.getGooglePlaceId(),
+                r.getLatitude(),
+                r.getLongitude(),
+                new HashSet<>());
+        return repository.save(newR);
     }
 
     @GetMapping("/restaurants/{id}")
@@ -68,12 +78,13 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/restaurants/{id}")
-    void deleteRestaurant(@PathVariable Long id) {
+    public String deleteRestaurant(@PathVariable Long id) {
         repository.deleteById(id);
+        return "Successfully deleted restaurant with id " + id;
     }
 
     @PostMapping("/restaurants/recommend")
-    String recommendRestaurants(@RequestBody LocationRequest locationRequest) {
+    String recommendRestaurants(@Valid @RequestBody LocationRequest locationRequest) {
         double latitude = locationRequest.getLatitude();
         double longitude = locationRequest.getLongitude();
 
