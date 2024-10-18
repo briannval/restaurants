@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SpringBootApplication
 public class RestaurantsApplication {
-
 	public static void main(String[] args) {
         SpringApplication application = new SpringApplication(RestaurantsApplication.class);
         application.run(args);
