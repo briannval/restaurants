@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import axios from 'axios';
 import './App.css';
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { Button } from "./components/ui/button";
-import { ScrollArea } from "./components/ui/scroll-area";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, setLocation, setRestaurants } from "./store";
 
 const mapContainerStyle = {
   width: "100%",
@@ -21,26 +22,10 @@ const defaultCenter = {
   lng: 150.644,
 };
 
-interface Restaurant {
-  name: string;
-  address: string;
-  googlePlaceId: string;
-  id: number;
-  latitude: number;
-  longitude: number;
-  reviews: Review[];
-}
-
-interface Review {
-  id: number;
-  taste: string;
-  service: string;
-  comment: string;
-}
-
 function App() {
-  const [location, setLocation] = useState<google.maps.LatLngLiteral | null>(null);
-  const [restaurants, setRestaurants] = useState<Restaurant[] | null>(null);
+  const dispatch = useDispatch();
+  const location = useSelector((state: RootState) => state.restaurant.location);
+  const restaurants = useSelector((state: RootState) => state.restaurant.restaurants);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY
@@ -50,14 +35,14 @@ function App() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLocation({
+          dispatch(setLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          });
+          }));
         },
         () => {
           console.error("Geolocation permission denied or unavailable");
-          setLocation(defaultCenter);
+          dispatch(setLocation(defaultCenter));
         }
       );
     }
@@ -67,8 +52,7 @@ function App() {
   const fetchPlaces = async () => {
     try {
       let res = await axios.get("http://localhost:8080/restaurants");
-      setRestaurants(res.data);
-      console.log(restaurants);
+      dispatch(setRestaurants(res.data));
     } catch (error) {
       console.error("Error fetching places:", error);
     }
