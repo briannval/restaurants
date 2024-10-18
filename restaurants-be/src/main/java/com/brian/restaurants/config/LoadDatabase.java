@@ -43,11 +43,11 @@ class LoadDatabase {
                     -123.244093,
                     new HashSet<>());
 
-            log.info("Preloading " + repository.save(koerner));
+            if (!repository.existsByGooglePlaceId(koerner.getGooglePlaceId())) log.info("Preloading " + repository.save(koerner));
 
-            log.info("Preloading " + repository.save(tims));
+            if (!repository.existsByGooglePlaceId(tims.getGooglePlaceId())) log.info("Preloading " + repository.save(tims));
 
-            log.info("Preloading " + repository.save(mightyOak));
+            if (!repository.existsByGooglePlaceId(mightyOak.getGooglePlaceId())) log.info("Preloading " + repository.save(mightyOak));
         };
     }
 }
