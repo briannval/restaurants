@@ -33,7 +33,7 @@ const restaurantSlice = createSlice({
   name: 'restaurant',
   initialState,
   reducers: {
-    setSelectedRestaurant: (state, action: PayloadAction<Restaurant>) => {
+    setSelectedRestaurant: (state, action: PayloadAction<Restaurant | null>) => {
       state.selectedRestaurant = action.payload;
     },
     addReview: (state, action: PayloadAction<{ restaurantId: number; review: Review }>) => {
@@ -45,7 +45,7 @@ const restaurantSlice = createSlice({
     setLocation: (state, action: PayloadAction<google.maps.LatLngLiteral>) => {
       state.location = action.payload;
     },
-    setRestaurants: (state, action: PayloadAction<Restaurant[]>) => {
+    setRestaurants: (state, action: PayloadAction<Restaurant[] | null>) => {
       state.restaurants = action.payload;
     },
   },
