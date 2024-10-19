@@ -1,12 +1,15 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Restaurant {
+interface RestaurantRecommend { 
   name: string;
   address: string;
   googlePlaceId: string;
-  id: number;
   latitude: number;
   longitude: number;
+}
+
+interface Restaurant extends RestaurantRecommend {
+  id: number;
   reviews: Review[];
 }
 
@@ -21,12 +24,16 @@ interface RestaurantState {
   selectedRestaurant: Restaurant | null;
   location: google.maps.LatLngLiteral | null;
   restaurants: Restaurant[] | null;
+  recommend: boolean;
+  recommendedRestaurants: RestaurantRecommend[] | null;
 }
 
 const initialState: RestaurantState = {
   selectedRestaurant: null,
   location: null,
   restaurants: null,
+  recommend: false,
+  recommendedRestaurants: null
 };
 
 const restaurantSlice = createSlice({
@@ -48,6 +55,12 @@ const restaurantSlice = createSlice({
     setRestaurants: (state, action: PayloadAction<Restaurant[] | null>) => {
       state.restaurants = action.payload;
     },
+    setRecommend: (state, action: PayloadAction<boolean>) => {
+    state.recommend = action.payload;
+    },
+    setRecommendedRestaurants: (state, action: PayloadAction<RestaurantRecommend[] | null>) => {
+    state.recommendedRestaurants = action.payload;
+    }
   },
 });
 
@@ -56,6 +69,8 @@ export const {
   addReview,
   setLocation,
   setRestaurants,
+  setRecommend,
+  setRecommendedRestaurants
 } = restaurantSlice.actions;
 
 const store = configureStore({
