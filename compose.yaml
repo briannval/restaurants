@@ -21,6 +21,16 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build:
+      context: ./restaurants-fe
+    ports:
+      - "3000:80"
+    env_file:
+      - ./restaurants-fe/.env
+    depends_on:
+      - backend
+
 volumes:
   pgdata:
     driver: local
